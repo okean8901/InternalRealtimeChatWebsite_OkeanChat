@@ -1,0 +1,94 @@
+﻿@{
+    ViewData["Title"] = "Chat";
+    var users = ViewBag.Users as List<Internal_Real_time_Chat_Website.Models.ApplicationUser>;
+}
+
+<div class="row h-100">
+    <!-- Users List -->
+    <div class="col-md-4 col-lg-3 border-end bg-light">
+        <div class="p-3">
+            <h5 class="mb-3">
+                <i class="fas fa-users"></i> Users
+                <span class="badge bg-primary ms-2" id="onlineCount">0</span>
+            </h5>
+            <div class="list-group" id="usersList">
+                @if (users != null)
+                {
+                    @foreach (var user in users)
+                    {
+                        <a href="#" class="list-group-item list-group-item-action user-item" data-user-id="@user.Id" data-user-name="@user.FullName">
+                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar me-2">
+                                        <i class="fas fa-user-circle fa-2x text-muted"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0">@user.FullName</h6>
+                                        <small class="text-muted">@user.Email</small>
+                                    </div>
+                                </div>
+                                <div>
+                                    <span class="badge @(user.IsOnline ? "bg-success" : "bg-secondary") status-indicator" data-user-id="@user.Id">
+                                        @(user.IsOnline ? "Online" : "Offline")
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Area -->
+    <div class="col-md-8 col-lg-9 d-flex flex-column">
+        <!-- Chat Header -->
+        <div class="border-bottom p-3 bg-white">
+            <div id="chatHeader" class="d-none">
+                <h5 class="mb-0">
+                    <i class="fas fa-comment"></i> 
+                    <span id="chatUserName"></span>
+                    <span class="badge bg-success ms-2" id="chatUserStatus">Online</span>
+                </h5>
+            </div>
+            <div id="noChatSelected" class="text-center text-muted">
+                <i class="fas fa-comments fa-3x mb-3"></i>
+                <h5>Select a user to start chatting</h5>
+                <p>Choose someone from the users list to begin your conversation</p>
+            </div>
+        </div>
+
+        <!-- Messages Area -->
+        <div class="flex-grow-1 p-3" style="height: 400px; overflow-y: auto;" id="messagesContainer">
+            <div id="messagesList"></div>
+        </div>
+
+        <!-- Message Input -->
+        <div class="border-top p-3 bg-white" id="messageInputArea" style="display: none;">
+            <form id="messageForm">
+                <div class="input-group">
+                    <input type="file" class="form-control" id="fileInput" accept="image/*,.pdf,.doc,.docx,.txt" style="display: none;">
+                    <button type="button" class="btn btn-outline-secondary" id="attachBtn">
+                        <i class="fas fa-paperclip"></i>
+                    </button>
+                    <input type="text" class="form-control" id="messageInput" placeholder="Type your message..." autocomplete="off">
+                    <button type="submit" class="btn btn-primary" id="sendBtn">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Spinner -->
+<div class="position-fixed top-50 start-50 translate-middle" id="loadingSpinner" style="display: none;">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://unpkg.com/@@microsoft/signalr@latest/dist/browser/signalr.min.js"></script>
+    <script src="~/js/chat.js"></script>
+}
