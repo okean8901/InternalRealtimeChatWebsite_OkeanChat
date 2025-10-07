@@ -3,23 +3,89 @@
     ViewData["Title"] = "Error";
 }
 
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-red-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl w-full">
+        <!-- Error Icon and Title -->
+        <div class="text-center mb-8">
+            <div class="mx-auto h-24 w-24 bg-red-600 rounded-full flex items-center justify-center mb-6">
+                <i class="fas fa-exclamation-triangle text-white text-3xl"></i>
+            </div>
+            <h1 class="text-4xl font-bold text-red-900 mb-2">Oops! Something went wrong</h1>
+            <p class="text-lg text-red-700">An error occurred while processing your request</p>
+        </div>
 
-@if (Model.ShowRequestId)
-{
-    <p>
-        <strong>Request ID:</strong> <code>@Model.RequestId</code>
-    </p>
-}
+        <!-- Error Details -->
+        <div class="bg-white rounded-xl shadow-lg p-8">
+            @if (Model.ShowRequestId)
+            {
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold text-gray-900 mb-3 flex items-center">
+                        <i class="fas fa-bug text-red-600 mr-2"></i>
+                        Error Details
+                    </h2>
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <p class="text-sm text-gray-600 mb-2">
+                            <strong>Request ID:</strong>
+                        </p>
+                        <code class="text-sm bg-gray-200 px-2 py-1 rounded font-mono">@Model.RequestId</code>
+                    </div>
+                </div>
+            }
 
-<h3>Development Mode</h3>
-<p>
-    Swapping to <strong>Development</strong> environment will display more detailed information about the error that occurred.
-</p>
-<p>
-    <strong>The Development environment shouldn't be enabled for deployed applications.</strong>
-    It can result in displaying sensitive information from exceptions to end users.
-    For local debugging, enable the <strong>Development</strong> environment by setting the <strong>ASPNETCORE_ENVIRONMENT</strong> environment variable to <strong>Development</strong>
-    and restarting the app.
-</p>
+            <!-- Development Mode Info -->
+            <div class="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-lg">
+                <div class="flex items-start">
+                    <i class="fas fa-info-circle text-blue-600 text-xl mr-3 mt-1"></i>
+                    <div>
+                        <h3 class="text-lg font-semibold text-blue-900 mb-2">Development Mode</h3>
+                        <p class="text-blue-800 mb-4">
+                            Swapping to <strong>Development</strong> environment will display more detailed information about the error that occurred.
+                        </p>
+                        <div class="bg-blue-100 rounded-lg p-4">
+                            <p class="text-blue-900 text-sm">
+                                <strong>⚠️ Important:</strong> The Development environment shouldn't be enabled for deployed applications. 
+                                It can result in displaying sensitive information from exceptions to end users.
+                            </p>
+                        </div>
+                        <p class="text-blue-800 mt-4 text-sm">
+                            For local debugging, enable the <strong>Development</strong> environment by setting the 
+                            <strong>ASPNETCORE_ENVIRONMENT</strong> environment variable to <strong>Development</strong> 
+                            and restarting the app.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="mt-8 flex flex-col sm:flex-row gap-4">
+                <button onclick="history.back()" 
+                        class="flex-1 bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors flex items-center justify-center">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Go Back
+                </button>
+                <a href="/" 
+                   class="flex-1 bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors flex items-center justify-center">
+                    <i class="fas fa-home mr-2"></i>
+                    Go Home
+                </a>
+            </div>
+        </div>
+
+        <!-- Help Section -->
+        <div class="mt-8 text-center">
+            <p class="text-gray-600 mb-4">Need help? Contact your system administrator</p>
+            <div class="flex justify-center space-x-4">
+                <a href="mailto:support@example.com" 
+                   class="text-primary-600 hover:text-primary-700 transition-colors flex items-center">
+                    <i class="fas fa-envelope mr-2"></i>
+                    Email Support
+                </a>
+                <a href="/Home/Privacy" 
+                   class="text-primary-600 hover:text-primary-700 transition-colors flex items-center">
+                    <i class="fas fa-shield-alt mr-2"></i>
+                    Privacy Policy
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

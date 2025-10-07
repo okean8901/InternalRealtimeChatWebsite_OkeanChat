@@ -1,5 +1,9 @@
+/* Site.css - Custom styles to complement Tailwind CSS */
+
+/* Base styles - Tailwind handles most of these now */
 html {
   font-size: 14px;
+  scroll-behavior: smooth;
 }
 
 @media (min-width: 768px) {
@@ -8,56 +12,68 @@ html {
   }
 }
 
+/* Focus styles - Tailwind handles these better */
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #3b82f6;
 }
 
+/* Legacy Bootstrap compatibility - keeping minimal styles */
 html {
   position: relative;
   min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+  margin-bottom: 0; /* Removed footer margin since we're using Tailwind */
 }
 
-/* Chat Styles */
-.chat-container {
-  height: calc(100vh - 120px);
+/* Chat-specific animations and effects */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.user-item {
-  border: none !important;
-  border-radius: 8px !important;
-  margin-bottom: 5px;
-  transition: all 0.3s ease;
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
-.user-item:hover {
-  background-color: #e3f2fd !important;
-  transform: translateX(5px);
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
-.user-item.active {
-  background-color: #2196f3 !important;
-  color: white !important;
+/* Message animations */
+.message-received {
+  animation: slideInFromLeft 0.3s ease-out;
 }
 
-.user-item.active .text-muted {
-  color: rgba(255, 255, 255, 0.8) !important;
+.message-sent {
+  animation: slideInFromRight 0.3s ease-out;
 }
 
+/* Legacy message styles - keeping for backward compatibility */
 .message {
   margin-bottom: 15px;
   animation: fadeIn 0.3s ease-in;
-}
-
-.message.sent {
-  text-align: right;
-}
-
-.message.received {
-  text-align: left;
 }
 
 .message-bubble {
@@ -69,77 +85,7 @@ body {
   position: relative;
 }
 
-.message.sent .message-bubble {
-  background-color: #2196f3;
-  color: white;
-  border-bottom-right-radius: 5px;
-}
-
-.message.received .message-bubble {
-  background-color: #f1f1f1;
-  color: #333;
-  border-bottom-left-radius: 5px;
-}
-
-.message-time {
-  font-size: 0.75rem;
-  color: #666;
-  margin-top: 5px;
-}
-
-.message.sent .message-time {
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.status-indicator {
-  font-size: 0.7rem;
-  padding: 2px 6px;
-}
-
-.avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #e0e0e0;
-}
-
-.online-indicator {
-  width: 10px;
-  height: 10px;
-  background-color: #4caf50;
-  border-radius: 50%;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  border: 2px solid white;
-}
-
-.offline-indicator {
-  width: 10px;
-  height: 10px;
-  background-color: #9e9e9e;
-  border-radius: 50%;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  border: 2px solid white;
-}
-
-#messagesContainer {
-  background-color: #fafafa;
-  border-radius: 10px;
-  margin: 10px;
-}
-
-#messageInputArea {
-  border-radius: 10px;
-  margin: 10px;
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-}
-
+/* Attachment styles */
 .attachment-preview {
   max-width: 200px;
   max-height: 200px;
@@ -155,29 +101,22 @@ body {
   margin: 5px 0;
   text-decoration: none;
   color: #1976d2;
+  transition: all 0.2s ease;
 }
 
 .file-attachment:hover {
   background-color: #bbdefb;
   color: #0d47a1;
+  transform: translateY(-1px);
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
+/* Typing indicator */
 .typing-indicator {
   display: none;
   padding: 10px 15px;
   color: #666;
   font-style: italic;
+  animation: pulse 1.5s ease-in-out infinite;
 }
 
 .typing-indicator.show {
@@ -185,22 +124,7 @@ body {
   animation: fadeIn 0.3s ease-in;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .chat-container {
-    height: calc(100vh - 80px);
-  }
-  
-  .message-bubble {
-    max-width: 85%;
-  }
-  
-  .user-item {
-    padding: 8px 12px;
-  }
-}
-
-/* Loading Animation */
+/* Loading dots animation */
 .loading-dots {
   display: inline-block;
 }
@@ -222,5 +146,55 @@ body {
   }
   80%, 100% {
     content: '...';
+  }
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .message-bubble {
+    max-width: 85%;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-friendly {
+    background: white !important;
+    color: black !important;
+  }
+}
+
+/* Dark mode support (optional) */
+@media (prefers-color-scheme: dark) {
+  .dark-mode {
+    background-color: #1f2937;
+    color: #f9fafb;
+  }
+  
+  .dark-mode-card {
+    background-color: #374151;
+    border-color: #4b5563;
   }
 }

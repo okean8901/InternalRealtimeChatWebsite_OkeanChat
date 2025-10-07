@@ -1,6 +1,6 @@
-﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
+﻿/* Layout-specific styles for Tailwind CSS compatibility */
 
+/* Legacy Bootstrap compatibility - minimal styles */
 a.navbar-brand {
   white-space: normal;
   text-align: center;
@@ -8,30 +8,44 @@ a.navbar-brand {
 }
 
 a {
-  color: #0077cc;
+  color: #3b82f6; /* Updated to match Tailwind primary color */
+  transition: color 0.2s ease;
 }
 
+a:hover {
+  color: #1d4ed8; /* Darker primary color on hover */
+}
+
+/* Button styles - Tailwind handles these better now */
 .btn-primary {
   color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+  background-color: #3b82f6; /* Updated to Tailwind primary */
+  border-color: #2563eb;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: #2563eb;
+  border-color: #1d4ed8;
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
   color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+  background-color: #3b82f6; /* Updated to Tailwind primary */
+  border-color: #2563eb;
 }
 
+/* Border utilities - Tailwind handles these */
 .border-top {
-  border-top: 1px solid #e5e5e5;
+  border-top: 1px solid #e5e7eb; /* Updated to Tailwind gray */
 }
+
 .border-bottom {
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e7eb; /* Updated to Tailwind gray */
 }
 
 .box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Updated to Tailwind shadow */
 }
 
 button.accept-policy {
@@ -39,10 +53,24 @@ button.accept-policy {
   line-height: inherit;
 }
 
+/* Footer - updated for Tailwind layout */
 .footer {
   position: absolute;
   bottom: 0;
   width: 100%;
   white-space: nowrap;
   line-height: 60px;
+}
+
+/* Additional Tailwind-compatible utilities */
+.text-primary {
+  color: #3b82f6 !important;
+}
+
+.bg-primary {
+  background-color: #3b82f6 !important;
+}
+
+.border-primary {
+  border-color: #3b82f6 !important;
 }

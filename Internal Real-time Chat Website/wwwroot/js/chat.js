@@ -131,17 +131,19 @@ class ChatApp {
     selectUser(userItem) {
         // Remove active class from all users
         document.querySelectorAll('.user-item').forEach(item => {
-            item.classList.remove('active');
+            item.classList.remove('bg-primary-50', 'border-primary-200');
+            item.classList.add('border-transparent');
         });
 
         // Add active class to selected user
-        userItem.classList.add('active');
+        userItem.classList.add('bg-primary-50', 'border-primary-200');
+        userItem.classList.remove('border-transparent');
 
         // Get user info
         const userId = userItem.dataset.userId;
         const userName = userItem.dataset.userName;
         const statusBadge = userItem.querySelector('.status-indicator');
-        const isOnline = statusBadge.classList.contains('bg-success');
+        const isOnline = statusBadge.classList.contains('bg-green-500');
 
         // Update current chat
         this.currentChatUserId = userId;
@@ -155,13 +157,18 @@ class ChatApp {
     }
 
     showChatInterface(userName, isOnline) {
-        this.elements.chatHeader.classList.remove('d-none');
-        this.elements.noChatSelected.classList.add('d-none');
+        this.elements.chatHeader.classList.remove('hidden');
+        this.elements.noChatSelected.classList.add('hidden');
         this.elements.messageInputArea.style.display = 'block';
 
         this.elements.chatUserName.textContent = userName;
+        this.elements.chatUserInitial.textContent = userName.charAt(0).toUpperCase();
         this.elements.chatUserStatus.textContent = isOnline ? 'Online' : 'Offline';
-        this.elements.chatUserStatus.className = `badge ms-2 ${isOnline ? 'bg-success' : 'bg-secondary'}`;
+        
+        const statusDot = document.getElementById('chatUserStatusDot');
+        if (statusDot) {
+            statusDot.className = `w-2 h-2 rounded-full ${isOnline ? 'bg-green-500' : 'bg-gray-400'}`;
+        }
 
         this.elements.messageInput.focus();
     }
@@ -199,11 +206,15 @@ class ChatApp {
 
     addMessageToUI(message) {
         const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${message.isFromCurrentUser ? 'sent' : 'received'}`;
+        messageDiv.className = `flex ${message.isFromCurrentUser ? 'justify-end' : 'justify-start'} ${message.isFromCurrentUser ? 'message-sent' : 'message-received'}`;
         messageDiv.dataset.messageId = message.id;
 
         const bubbleDiv = document.createElement('div');
-        bubbleDiv.className = 'message-bubble';
+        bubbleDiv.className = `max-w-xs lg:max-w-md px-4 py-2 rounded-2xl message-bubble-shadow ${
+            message.isFromCurrentUser 
+                ? 'bg-primary-600 text-white rounded-br-md' 
+                : 'bg-white text-gray-900 rounded-bl-md border border-gray-200'
+        }`;
 
         // Message content
         let content = this.escapeHtml(message.content);
@@ -211,11 +222,12 @@ class ChatApp {
         // Handle attachments
         if (message.attachmentPath) {
             if (message.attachmentType && message.attachmentType.startsWith('image/')) {
-                content += `<br><img src="${message.attachmentPath}" class="attachment-preview" alt="Attachment">`;
+                content += `<br><img src="${message.attachmentPath}" class="mt-2 max-w-full h-auto rounded-lg" alt="Attachment">`;
             } else {
                 const fileName = message.attachmentPath.split('/').pop();
-                content += `<br><a href="${message.attachmentPath}" class="file-attachment" target="_blank">
-                    <i class="fas fa-paperclip"></i> ${fileName}
+                content += `<br><a href="${message.attachmentPath}" class="inline-flex items-center space-x-1 mt-2 text-sm underline hover:no-underline" target="_blank">
+                    <i class="fas fa-paperclip"></i>
+                    <span>${fileName}</span>
                 </a>`;
             }
         }
@@ -224,11 +236,16 @@ class ChatApp {
 
         // Message time
         const timeDiv = document.createElement('div');
-        timeDiv.className = 'message-time';
+        timeDiv.className = `text-xs mt-1 ${message.isFromCurrentUser ? 'text-primary-100' : 'text-gray-500'}`;
         timeDiv.textContent = this.formatTime(message.timestamp);
 
-        messageDiv.appendChild(bubbleDiv);
-        messageDiv.appendChild(timeDiv);
+        // Container for message and time
+        const containerDiv = document.createElement('div');
+        containerDiv.className = 'flex flex-col';
+        containerDiv.appendChild(bubbleDiv);
+        containerDiv.appendChild(timeDiv);
+
+        messageDiv.appendChild(containerDiv);
         this.elements.messagesList.appendChild(messageDiv);
     }
 
@@ -315,23 +332,32 @@ class ChatApp {
 
     updateUserStatus(userId, isOnline) {
         const statusBadge = document.querySelector(`.status-indicator[data-user-id="${userId}"]`);
+        const statusTextBadge = document.querySelector(`.status-badge[data-user-id="${userId}"]`);
+        
         if (statusBadge) {
-            statusBadge.textContent = isOnline ? 'Online' : 'Offline';
-            statusBadge.className = `badge ms-2 status-indicator ${isOnline ? 'bg-success' : 'bg-secondary'}`;
+            statusBadge.className = `absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white status-indicator ${isOnline ? 'bg-green-500' : 'bg-gray-400'}`;
+        }
+        
+        if (statusTextBadge) {
+            statusTextBadge.textContent = isOnline ? 'Online' : 'Offline';
+            statusTextBadge.className = `inline-flex items-center px-2 py-1 rounded-full text-xs font-medium status-badge ${isOnline ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`;
         }
 
         // Update chat header status if this is the current chat user
         if (userId === this.currentChatUserId) {
             this.elements.chatUserStatus.textContent = isOnline ? 'Online' : 'Offline';
-            this.elements.chatUserStatus.className = `badge ms-2 ${isOnline ? 'bg-success' : 'bg-secondary'}`;
+            const statusDot = document.getElementById('chatUserStatusDot');
+            if (statusDot) {
+                statusDot.className = `w-2 h-2 rounded-full ${isOnline ? 'bg-green-500' : 'bg-gray-400'}`;
+            }
         }
 
         this.updateOnlineCount();
     }
 
     updateOnlineCount() {
-        const onlineUsers = document.querySelectorAll('.status-indicator.bg-success');
-        this.elements.onlineCount.textContent = onlineUsers.length;
+        const onlineUsers = document.querySelectorAll('.status-indicator.bg-green-500');
+        this.elements.onlineCount.textContent = `${onlineUsers.length} online`;
     }
 
     scrollToBottom() {
@@ -343,14 +369,19 @@ class ChatApp {
     }
 
     showNotification(message, type = 'info') {
-        // Simple notification - you can enhance this with a proper notification library
-        const alertClass = type === 'error' ? 'alert-danger' : 'alert-info';
         const notification = document.createElement('div');
-        notification.className = `alert ${alertClass} alert-dismissible fade show position-fixed`;
-        notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+        const bgColor = type === 'error' ? 'bg-red-500' : 'bg-primary-600';
+        const icon = type === 'error' ? 'fas fa-exclamation-circle' : 'fas fa-info-circle';
+        
+        notification.className = `fixed top-4 right-4 ${bgColor} text-white px-6 py-4 rounded-lg shadow-lg z-50 max-w-sm`;
         notification.innerHTML = `
-            ${message}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <div class="flex items-center space-x-3">
+                <i class="${icon}"></i>
+                <span class="flex-1">${message}</span>
+                <button onclick="this.parentElement.parentElement.remove()" class="text-white hover:text-gray-200">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
         `;
         
         document.body.appendChild(notification);
@@ -358,7 +389,7 @@ class ChatApp {
         // Auto remove after 5 seconds
         setTimeout(() => {
             if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
+                notification.remove();
             }
         }, 5000);
     }

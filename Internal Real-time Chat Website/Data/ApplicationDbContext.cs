@@ -14,6 +14,9 @@ namespace Internal_Real_time_Chat_Website.Data
         public DbSet<Message> Messages { get; set; }
         public DbSet<ChatRoom> ChatRooms { get; set; }
         public DbSet<ChatRoomUser> ChatRoomUsers { get; set; }
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<PostComment> PostComments { get; set; }
+        public DbSet<PostLike> PostLikes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -61,6 +64,41 @@ namespace Internal_Real_time_Chat_Website.Data
             // Configure unique constraint for ChatRoomUser
             builder.Entity<ChatRoomUser>()
                 .HasIndex(cru => new { cru.UserId, cru.ChatRoomId })
+                .IsUnique();
+
+            // Feed
+            builder.Entity<Post>()
+                .HasOne(p => p.User)
+                .WithMany()
+                .HasForeignKey(p => p.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<PostComment>()
+                .HasOne(pc => pc.Post)
+                .WithMany(p => p.Comments)
+                .HasForeignKey(pc => pc.PostId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<PostComment>()
+                .HasOne(pc => pc.User)
+                .WithMany()
+                .HasForeignKey(pc => pc.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<PostLike>()
+                .HasOne(pl => pl.Post)
+                .WithMany(p => p.Likes)
+                .HasForeignKey(pl => pl.PostId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<PostLike>()
+                .HasOne(pl => pl.User)
+                .WithMany()
+                .HasForeignKey(pl => pl.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<PostLike>()
+                .HasIndex(pl => new { pl.PostId, pl.UserId })
                 .IsUnique();
         }
     }

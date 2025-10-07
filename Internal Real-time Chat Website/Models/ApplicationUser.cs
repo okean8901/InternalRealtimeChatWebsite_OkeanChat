@@ -15,6 +15,10 @@ namespace Internal_Real_time_Chat_Website.Models
 
         public string? Avatar { get; set; }
 
+        // User custom status message displayed on profile and potentially in chat
+        [StringLength(280)]
+        public string? Status { get; set; }
+
         // Navigation properties
         public virtual ICollection<Message> SentMessages { get; set; } = new List<Message>();
         public virtual ICollection<Message> ReceivedMessages { get; set; } = new List<Message>();

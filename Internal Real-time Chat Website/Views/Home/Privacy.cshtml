@@ -1,6 +1,88 @@
 ﻿@{
     ViewData["Title"] = "Privacy Policy";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <!-- Header -->
+    <div class="text-center mb-12">
+        <div class="mx-auto h-16 w-16 bg-primary-600 rounded-xl flex items-center justify-center mb-6">
+            <i class="fas fa-shield-alt text-white text-2xl"></i>
+        </div>
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">Privacy Policy</h1>
+        <p class="text-lg text-gray-600">Your privacy is important to us at OkeanChat</p>
+    </div>
+
+    <!-- Content -->
+    <div class="bg-white rounded-xl shadow-lg p-8 space-y-8">
+        <div class="prose prose-lg max-w-none">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4 flex items-center">
+                <i class="fas fa-info-circle text-primary-600 mr-3"></i>
+                Information We Collect
+            </h2>
+            <p class="text-gray-700 leading-relaxed mb-6">
+                OkeanChat is designed as an internal communication platform. We collect minimal information necessary 
+                to provide our chat services effectively and securely.
+            </p>
+
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4 flex items-center">
+                <i class="fas fa-user text-primary-600 mr-3"></i>
+                Personal Information
+            </h2>
+            <ul class="list-disc list-inside text-gray-700 space-y-2 mb-6">
+                <li>Full name for identification purposes</li>
+                <li>Email address for account management</li>
+                <li>Profile information you choose to provide</li>
+                <li>Chat messages and file attachments</li>
+            </ul>
+
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4 flex items-center">
+                <i class="fas fa-lock text-primary-600 mr-3"></i>
+                Data Security
+            </h2>
+            <p class="text-gray-700 leading-relaxed mb-6">
+                We implement industry-standard security measures to protect your data. All communications 
+                are encrypted and stored securely on our servers.
+            </p>
+
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4 flex items-center">
+                <i class="fas fa-share text-primary-600 mr-3"></i>
+                Data Sharing
+            </h2>
+            <p class="text-gray-700 leading-relaxed mb-6">
+                We do not share your personal information with third parties. Your chat data remains 
+                confidential and is only accessible to authorized users within your organization.
+            </p>
+
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4 flex items-center">
+                <i class="fas fa-cog text-primary-600 mr-3"></i>
+                Your Rights
+            </h2>
+            <ul class="list-disc list-inside text-gray-700 space-y-2 mb-6">
+                <li>Access your personal data</li>
+                <li>Request data correction or deletion</li>
+                <li>Export your chat history</li>
+                <li>Control notification preferences</li>
+            </ul>
+
+            <div class="bg-primary-50 border-l-4 border-primary-600 p-6 rounded-lg">
+                <div class="flex items-start">
+                    <i class="fas fa-question-circle text-primary-600 text-xl mr-3 mt-1"></i>
+                    <div>
+                        <h3 class="text-lg font-semibold text-primary-900 mb-2">Questions?</h3>
+                        <p class="text-primary-800">
+                            If you have any questions about this privacy policy or our data practices, 
+                            please contact your system administrator.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="text-center mt-12">
+        <p class="text-sm text-gray-500">
+            Last updated: @DateTime.Now.ToString("MMMM dd, yyyy")
+        </p>
+    </div>
+</div>
