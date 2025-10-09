@@ -15,12 +15,10 @@ namespace Internal_Real_time_Chat_Website
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            // Add Entity Framework
+            // Add Entity Framework - SQL Server
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseMySql(
-                    builder.Configuration.GetConnectionString("DefaultConnection"),
-                    new MySqlServerVersion(new Version(8, 0, 0))
-                ));
+                options.UseSqlServer(
+                    builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // Add Identity
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -89,7 +87,7 @@ namespace Internal_Real_time_Chat_Website
             {
                 var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-                
+
                 try
                 {
                     await context.Database.EnsureCreatedAsync();

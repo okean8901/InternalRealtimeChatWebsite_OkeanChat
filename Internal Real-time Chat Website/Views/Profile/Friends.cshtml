@@ -1,0 +1,73 @@
+@{
+	ViewData["Title"] = "Friends";
+}
+
+<div class="max-w-4xl mx-auto p-4">
+	<h1 class="text-2xl font-bold mb-4">Friends</h1>
+
+	<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+		<div>
+			<h2 class="text-lg font-semibold mb-2">All Users</h2>
+			<form asp-action="SendFriendRequest" method="post">
+				@Html.AntiForgeryToken()
+				<select name="toUserId" class="border rounded px-2 py-1 w-full mb-2">
+					@foreach (var u in (IEnumerable<dynamic>)ViewBag.Users)
+					{
+						<option value="@u.Id">@u.FullName (@u.UserName)</option>
+					}
+				</select>
+				<button class="bg-primary-600 text-white px-4 py-1 rounded">Send Request</button>
+			</form>
+		</div>
+
+		<div>
+			<h2 class="text-lg font-semibold mb-2">Incoming Requests</h2>
+			@if (((IEnumerable<Internal_Real_time_Chat_Website.Models.FriendRequest>)ViewBag.Incoming).Any())
+			{
+				@foreach (var r in (IEnumerable<Internal_Real_time_Chat_Website.Models.FriendRequest>)ViewBag.Incoming)
+				{
+					<div class="flex items-center justify-between border rounded px-3 py-2 mb-2">
+						<span>@r.Requester.FullName (@r.Requester.UserName)</span>
+						<div class="space-x-2">
+							<form asp-action="RespondFriendRequest" method="post" class="inline">
+								@Html.AntiForgeryToken()
+								<input type="hidden" name="id" value="@r.Id" />
+								<input type="hidden" name="accept" value="true" />
+								<button class="bg-green-600 text-white px-3 py-1 rounded">Accept</button>
+							</form>
+							<form asp-action="RespondFriendRequest" method="post" class="inline">
+								@Html.AntiForgeryToken()
+								<input type="hidden" name="id" value="@r.Id" />
+								<input type="hidden" name="accept" value="false" />
+								<button class="bg-red-600 text-white px-3 py-1 rounded">Decline</button>
+							</form>
+						</div>
+					</div>
+				}
+			}
+			else
+			{
+				<p class="text-gray-500">No incoming requests.</p>
+			}
+		</div>
+	</div>
+
+	<div class="mt-6">
+		<h2 class="text-lg font-semibold mb-2">Outgoing Requests</h2>
+		@if (((IEnumerable<Internal_Real_time_Chat_Website.Models.FriendRequest>)ViewBag.Outgoing).Any())
+		{
+			<ul class="list-disc pl-5">
+				@foreach (var r in (IEnumerable<Internal_Real_time_Chat_Website.Models.FriendRequest>)ViewBag.Outgoing)
+				{
+					<li>To @r.Addressee.FullName (@r.Addressee.UserName) - Pending</li>
+				}
+			</ul>
+		}
+		else
+		{
+			<p class="text-gray-500">No outgoing requests.</p>
+		}
+	</div>
+</div>
+
+
